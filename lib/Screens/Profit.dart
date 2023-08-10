@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:myorder/Constants.dart';
 import 'package:myorder/Screens/InventoryPage.dart';
 import 'package:myorder/Services/API.dart';
@@ -250,7 +251,15 @@ class _ProfitPageState extends State<ProfitPage> {
         firstDate: DateTime(1950),
         //DateTime.now() - not to allow to choose before today.
         lastDate: DateTime(2100));
-    String month = pickedDate!.month.toString().padLeft(2, '0');
-    await API.getProfits(updateProfitsState, month);
+    String date = DateFormat('dd-MM-yyyy').format(pickedDate!);
+    String day = date.split('-')[0];
+    if (int.parse(day) <= 20) {
+      String month = date.split('-')[1];
+      await API.getProfits(updateProfitsState, month);
+    } else {
+      int numb = int.parse(date.split('-')[1]) + 1;
+      String month = numb.toString();
+      await API.getProfits(updateProfitsState, month);
+    }
   }
 }

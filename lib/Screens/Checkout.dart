@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:myorder/Constants.dart';
 import 'package:myorder/Screens/ManualInput.dart';
 import 'package:myorder/Screens/SellingPage.dart';
@@ -184,7 +185,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
         children: [
           GestureDetector(
             onTap: () {
-              _showProfitInputDialog(context, index);
+              if (items[index].name == "Manual")
+                _showProfitInputDialog(context, index);
             },
             child: CircleAvatar(
               radius: 25,
@@ -409,9 +411,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   _getToday() {
     DateTime now = DateTime.now();
-    String month = now.month.toString().padLeft(2, '0');
-
-    return month;
+    String date = DateFormat('dd-MM-yyyy').format(now);
+    String day = date.split('-')[0];
+    if (int.parse(day) <= 20) {
+      String month = date.split('-')[1];
+      return month;
+    } else {
+      String str = date.split('-')[1];
+      int month = int.parse(str) + 1;
+      return month.toString();
+    }
   }
 
   _checkOut() async {
@@ -425,7 +434,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
           quantity: items[index].quantity,
           date: _getToday());
     });
-
+    List<String> ids = List.generate(items.length, (index) {
+      if (items[index].name != "Manual") {
+        return items[index].itemId!;
+      } else {
+        return "";
+      }
+    });
+    ids.removeWhere((element) => element.isEmpty);
+    await API.reduceQuantity(ids);
     await API.addProfits(list);
   }
 }

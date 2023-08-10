@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:myorder/Services/Models.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -139,7 +140,7 @@ class API {
       return Profit(
         id: maps[index]['id'],
         name: maps[index]['name'],
-        profit: maps[index]['price'],
+        profit: maps[index]['profit'],
         quantity: maps[index]['quantity'],
         date: maps[index]['date'],
       );
@@ -240,7 +241,15 @@ class API {
   static Future<void> addProfits(List<Profit> profits) async {
     final db = await API().initDatabase();
     DateTime now = DateTime.now();
-    String month = now.month.toString().padLeft(2, '0');
+    String date = DateFormat('dd-MM-yyyy').format(now);
+    int day = int.parse(date.split('-')[0]);
+    String month = '';
+    if (day <= 20) {
+      month = date.split('-')[1];
+    } else {
+      int numb = int.parse(date.split('-')[1]) + 1;
+      month = numb.toString();
+    }
 
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
 SELECT * FROM profit
@@ -254,7 +263,7 @@ WHERE date = '$month';
       Profit profit = Profit(
         id: map['id'],
         name: map['name'],
-        profit: map['price'],
+        profit: map['profit'],
         quantity: map['quantity'],
         date: map['date'],
       );
@@ -268,7 +277,7 @@ WHERE date = '$month';
       String itemName = item.name;
 
       if (existingProfits.containsKey(itemName) &&
-          existingProfits[itemName]!.profit == item.quantity) {
+          existingProfits[itemName]!.profit == item.profit) {
         // Update the existing profit's quantity
         Profit existingProfit = existingProfits[itemName]!;
         int newQuantity = existingProfit.quantity + item.quantity;
@@ -291,12 +300,22 @@ WHERE date = '$month';
     await batch.commit();
   }
 
+  static Future<void> reduceQuantity(List<String> ids) async {
+    final db = await API().initDatabase();
+    for (var id in ids) {
+      List<Map<String, dynamic>> item = await db.query('items',
+          where: 'id = ?', whereArgs: [id], columns: ['quantity']);
+      await db.update('items', {'quantity': item[0]['quantity'] - 1},
+          where: 'id = ?', whereArgs: [id]);
+    }
+  }
+
   static Future<CartItem?> getItemByBarcode(String barcode) async {
     final db = await API().initDatabase();
     final List<Map<String, dynamic>> maps = await db.query(
       'items',
       where: 'barcode = ?',
-      columns: ['name', 'selling_price', 'buying_price'],
+      columns: ['id', 'name', 'selling_price', 'buying_price'],
       whereArgs: [barcode],
       limit: 1,
     );
@@ -306,6 +325,7 @@ WHERE date = '$month';
     }
 
     return CartItem(
+        itemId: maps[0]['id'],
         name: maps[0]['name'],
         sellingPrice: maps[0]['selling_price'],
         buyingPrice: maps[0]['buying_price'],

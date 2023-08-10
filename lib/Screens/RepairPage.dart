@@ -237,9 +237,15 @@ class _RepairPageState extends State<RepairPage> {
 
   _getMonth(int index) {
     String date = clients![index].insertedOn;
-
-    String month = date.split('-')[1];
-    return month;
+    String day = date.split('-')[0];
+    if (int.parse(day) <= 20) {
+      String month = date.split('-')[1];
+      return month;
+    } else {
+      String str = date.split('-')[1];
+      int month = int.parse(str) + 1;
+      return month.toString();
+    }
   }
 
   _addProfit(int index) async {

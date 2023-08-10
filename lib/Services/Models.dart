@@ -86,7 +86,7 @@ class Profit {
     return {
       'id': id,
       'name': name,
-      'price': profit,
+      'profit': profit,
       'quantity': quantity,
       'date': date,
     };
@@ -94,13 +94,15 @@ class Profit {
 }
 
 class CartItem {
+  String? itemId;
   String name;
   double buyingPrice;
   double sellingPrice;
   int quantity = 1;
   double? profit;
   CartItem(
-      {required this.name,
+      {this.itemId,
+      required this.name,
       required this.sellingPrice,
       required this.buyingPrice,
       this.profit});

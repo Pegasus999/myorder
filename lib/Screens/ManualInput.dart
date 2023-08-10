@@ -116,48 +116,9 @@ class _ManualInputState extends State<ManualInput> {
                       height: 100,
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("1"),
-                                  child: Center(
-                                    child: Text(
-                                      "1",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("2"),
-                                  child: Center(
-                                    child: Text(
-                                      "2",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("3"),
-                                  child: Center(
-                                    child: Text(
-                                      "3",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          )
+                          touch("1"),
+                          touch("2"),
+                          touch("3"),
                         ],
                       ),
                     ),
@@ -165,48 +126,9 @@ class _ManualInputState extends State<ManualInput> {
                       height: 100,
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("4"),
-                                  child: Center(
-                                    child: Text(
-                                      "4",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("5"),
-                                  child: Center(
-                                    child: Text(
-                                      "5",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                  onTap: () => _add("6"),
-                                  child: Center(
-                                    child: Text(
-                                      "6",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25),
-                                    ),
-                                  )),
-                            ),
-                          )
+                          touch('4'),
+                          touch('5'),
+                          touch('6'),
                         ],
                       ),
                     ),
@@ -214,48 +136,9 @@ class _ManualInputState extends State<ManualInput> {
                       height: 100,
                       child: Row(
                         children: [
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () => _add("7"),
-                              child: Center(
-                                child: Text(
-                                  "7",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              ),
-                            ),
-                          )),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () => _add("8"),
-                              child: Center(
-                                child: Text(
-                                  "8",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              ),
-                            ),
-                          )),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () => _add("9"),
-                              child: Center(
-                                child: Text(
-                                  "9",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              ),
-                            ),
-                          ))
+                          touch('7'),
+                          touch('8'),
+                          touch('9'),
                         ],
                       ),
                     ),
@@ -263,34 +146,8 @@ class _ManualInputState extends State<ManualInput> {
                       height: 100,
                       child: Row(
                         children: [
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () => _add("."),
-                              child: Center(
-                                child: Text(
-                                  ".",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              ),
-                            ),
-                          )),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () => _add("0"),
-                              child: Center(
-                                child: Text(
-                                  "0",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                ),
-                              ),
-                            ),
-                          )),
+                          touch('.'),
+                          touch('0'),
                           Expanded(
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -313,6 +170,22 @@ class _ManualInputState extends State<ManualInput> {
             ))
           ]),
         ),
+      ),
+    );
+  }
+
+  Expanded touch(String label) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GestureDetector(
+            onTap: () => _add(label),
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(color: Colors.white, fontSize: 25),
+              ),
+            )),
       ),
     );
   }
